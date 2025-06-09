@@ -1,0 +1,10 @@
+header:
+  version: 11
+
+machine: hardkernel-odroidn2plus
+
+repos:
+  meta-meson:
+    url: https://github.com/superna9999/meta-meson.git
+    refspec: kirkstone
+    path: layers/meta-meson

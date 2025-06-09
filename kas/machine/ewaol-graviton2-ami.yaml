@@ -1,0 +1,55 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+header:
+  version: 10
+  includes:
+    - repo: meta-ewaol
+      file: meta-ewaol-config/kas/baremetal.yml
+
+repos:
+  meta-arm:
+    url: https://git.yoctoproject.org/git/meta-arm
+    path: layers/meta-arm
+    refspec: kirkstone
+    layers:
+      meta-arm: included
+      meta-arm-toolchain: included
+  meta-ewaol:
+    url: https://gitlab.com/Linaro/ewaol/meta-ewaol
+    path: layers/meta-ewaol
+    refspec: v1.0
+  meta-aws:
+    url: https://github.com/aws4embeddedlinux/meta-aws.git
+    path: layers/meta-aws
+    refspec: kirkstone
+  meta-virtualization:
+    refspec: kirkstone
+  meta-ewaol-ext:
+    path: meta-ewaol-ext
+    refspec: kirkstone
+  meta-openembedded:
+    refspec: kirkstone
+  poky:
+    refspec: kirkstone
+
+machine: generic-arm64
+
+local_conf_header:
+   meta-custom: |
+    FILESEXTRAPATHS:prepend:pn-linux-yocto = "${TOPDIR}/../meta-ewaol-ext/recipes-aws-graviton2/kernelconfig/:"
+    SRC_URI:append:pn-linux-yocto = " file://gravitonKernelConfigs.cfg "
+
+    INHERIT += "extrausers"
+    # Hardening: Locking the root password. Creating the ewaol without password for ssh key-based login only
+    EXTRA_USERS_PARAMS = "usermod -L root; useradd -p '*' ewaol"
+
+    EXTRA_IMAGE_FEATURES:append = "ssh-server-openssh"
+    # Forcing removal of debug-tweakes as ewaol includes it in all targets by default and that leads to reversing some sshd_config hardening done in our bbappend when do_rootfs runs
+    EXTRA_IMAGE_FEATURES:remove = "debug-tweaks"
+    IMAGE_INSTALL:append = " git rng-tools aws-cli cloud-init cloud-init-systemd e2fsprogs e2fsprogs-resize2fs e2fsprogs-tune2fs e2fsprogs-e2fsck e2fsprogs-mke2fs parted sudo sudo-sudo openssh-sftp-server python3-netifaces python3-charset-normalizer canutils"
+    IMAGE_FSTYPES += " wic wic.vhdx"
+    DISTRO_FEATURES:append = " ewaol-baremetal"
+
+# target: 
+#   - ewaol-baremetal-image
+

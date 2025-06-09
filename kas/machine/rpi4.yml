@@ -1,0 +1,20 @@
+header:
+  version: 11
+
+machine: raspberrypi4-64
+
+repos:
+  meta-raspberrypi:
+    url: https://github.com/agherzan/meta-raspberrypi.git
+    refspec: kirkstone
+    path: layers/meta-raspberrypi
+
+local_conf_header:
+  meta-raspberrypi: |
+    # Always nice to have a serial console available :¬)
+    ENABLE_UART = "1"
+    RPI_EXTRA_CONFIG += "\ndtoverlay=disable-bt"
+
+    # Hijack the CMDLINE_DEBUG to get the k3s cmdline requirements enabled
+    # We could really do with an upstream friendly way of doing this.
+    CMDLINE_DEBUG += " cgroup_memory=1 cgroup_enable=memory"

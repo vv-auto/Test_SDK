@@ -1,0 +1,21 @@
+header:
+  version: 11
+
+machine: imx8mp-lpddr4-evk
+
+repos:
+  # Upstream recipes required to build for the IMX platform
+  meta-freescale:
+    url: https://github.com/Freescale/meta-freescale.git
+    refspec: kirkstone
+    path: layers/meta-freescale
+
+local_conf_header:
+  meta-imx: |
+    # Accept the IMX EULA
+    ACCEPT_FSL_EULA = "1"
+    # Use our local linux-yocto recipe - derived from upstream
+    # Details in meta-ewaol.ext/recipes-imx/README.md
+    PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"
+
+  

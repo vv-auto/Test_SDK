@@ -1,0 +1,39 @@
+header:
+  version: 11
+
+machine: s4sk
+
+repos:
+  meta-renesas:
+    url: https://github.com/renesas-rcar/meta-renesas
+    refspec: kirkstone-dev
+    path: layers/meta-renesas
+    layers:
+      meta-rcar-gateway:
+    patches:
+      1:
+       repo: meta-renesas
+       path: ../../patches/rcar-s4sk/0001-meta-rcar-gateway-Add-Docker-and-kubernetes-configur.patch
+      2:
+       repo: meta-renesas
+       path: ../../patches/rcar-s4sk/0002-meta-rcar-gateway-Add-Kickstart-for-creating-mounted.patch
+
+  poky:
+    path: layers/poky
+    layers:
+      meta:
+      meta-poky:
+      meta-yocto-bsp:
+
+local_conf_header:
+  meta-renesas: |
+    # Don't use the linux-renesas downstream, but rather use
+    # the generic linux-yocto
+    PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"
+    KERNEL_VERSION_SANITY_SKIP="1"
+    DISTRO_FEATURES:append = " systemd ewaol-test"
+    WKS_FILE="s4sk.wks.in"
+    IMAGE_INSTALL:append = " kernel-devicetree iperf3 bmap-tools xz"
+    IMAGE_FSTYPES += "wic wic.bmap"
+    VIRTUAL-RUNTIME_init_manager = "systemd"
+

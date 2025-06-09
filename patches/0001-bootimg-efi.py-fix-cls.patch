@@ -1,0 +1,37 @@
+From f368486c6d6f2bf042d2e7da9f49238e84a2229b Mon Sep 17 00:00:00 2001
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Thu, 14 Jul 2022 13:33:10 +0100
+Subject: [PATCH] bootimg-efi.py: fix cls
+
+Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+---
+ scripts/lib/wic/plugins/source/bootimg-efi.py | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/scripts/lib/wic/plugins/source/bootimg-efi.py b/scripts/lib/wic/plugins/source/bootimg-efi.py
+index 588fc94dcc..04548346ab 100644
+--- a/scripts/lib/wic/plugins/source/bootimg-efi.py
++++ b/scripts/lib/wic/plugins/source/bootimg-efi.py
+@@ -349,11 +349,14 @@ class BootimgEFIPlugin(SourcePlugin):
+             exec_cmd(install_cmd)
+ 
+         if get_bitbake_var("IMAGE_EFI_BOOT_FILES"):
+-            for src_path, dst_path in cls.install_task:
+-                install_cmd = "install -m 0644 -D %s %s" \
+-                              % (os.path.join(kernel_dir, src_path),
+-                                 os.path.join(hdddir, dst_path))
+-                exec_cmd(install_cmd)
++            try:
++                for src_path, dst_path in cls.install_task:
++                    install_cmd = "install -m 0644 -D %s %s" \
++                        % (os.path.join(kernel_dir, src_path),
++                           os.path.join(hdddir, dst_path))
++                    exec_cmd(install_cmd)
++            except:
++                pass
+ 
+         try:
+             if source_params['loader'] == 'grub-efi':
+-- 
+2.25.1
+

@@ -1,0 +1,77 @@
+header:
+  version: 11
+  includes:
+    - repo: meta-ewaol
+      file: meta-ewaol-config/kas/include/arm-machines.yml
+
+machine: ledge-secure-qemuarm64
+
+repos:
+  meta-ledge-secure:
+    url: https://gitlab.com/Linaro/trustedsubstrate/meta-ledge-secure.git
+    refspec: kirkstone
+    path: layers/meta-ledge-secure
+    layers:
+     meta-ledge-secure:
+
+  meta-secure-core:
+    url: https://github.com/jiazhang0/meta-secure-core
+    refspec: d0a02859719f1a2c6b98d9d9afe785ec8535ec32
+    path: layers/meta-secure-core
+    layers:
+      meta:
+      meta-tpm2:
+      meta-encrypted-storage:
+      meta-efi-secure-boot:
+      meta-signing-key:
+
+  meta-openembedded:
+    url: https://git.openembedded.org/meta-openembedded
+    refspec: kirkstone
+    path: layers/meta-openembedded
+    layers:
+      meta-initramfs:
+      meta-perl:
+
+  meta-security:
+     url: https://git.yoctoproject.org/git/meta-security
+     refspec: kirkstone
+     path: layers/meta-security
+     layers:
+       meta-tpm:
+       meta-parsec:
+
+  meta-clang:
+     url: https://github.com/kraj/meta-clang
+     refspec: kirkstone
+     path: layers/meta-clang
+
+  meta-selinux:
+    path: layers/meta-selinux
+    url: http://git.yoctoproject.org/git/meta-selinux
+    refspec: kirkstone
+
+  poky:
+    url: https://git.yoctoproject.org/git/poky
+    refspec: kirkstone
+    path: layers/poky
+    layers:
+      meta:
+      meta-poky:
+    patches:
+      p1:
+        repo : poky
+        path : ../../patches/0001-wic-add-UEFI-kernel-as-UEFI-stub.patch
+      p2:
+        repo : poky
+        path : ../../patches/0002-wic-bootimg-efi-implement-include-path.patch
+      p3:
+        repo : poky
+        path : ../../patches/0001-bootimg-efi.py-fix-cls.patch
+
+local_conf_header:
+  base: |
+    WKS_FILE="ledge-secure.wks.in"
+    DISTRO_FEATURES:append = " tpm2"
+    DISTRO_FEATURES:append = " polkit"
+    DISTRO_FEATURES:append = " efi"

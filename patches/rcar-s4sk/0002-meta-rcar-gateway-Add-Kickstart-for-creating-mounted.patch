@@ -1,0 +1,24 @@
+From ff39b8f6da579fae9f2dd1b0c04880424664a625 Mon Sep 17 00:00:00 2001
+From: Canh Lam <canh.lam.uj@renesas.com>
+Date: Fri, 12 Apr 2024 08:17:33 +0700
+Subject: [PATCH 2/2] meta-rcar-gateway: Add Kickstart for creating mounted
+ partition
+
+Add Kickstart for creating mounted partition using bmaptool
+
+Signed-off-by: Canh Lam <canh.lam.uj@renesas.com>
+---
+ meta-rcar-gateway/wic/s4sk.wks.in | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 meta-rcar-gateway/wic/s4sk.wks.in
+
+diff --git a/meta-rcar-gateway/wic/s4sk.wks.in b/meta-rcar-gateway/wic/s4sk.wks.in
+new file mode 100644
+index 00000000..081759c6
+--- /dev/null
++++ b/meta-rcar-gateway/wic/s4sk.wks.in
+@@ -0,0 +1 @@
++part / --source rootfs --rootfs-dir tmp_baremetal/work/s4sk-poky-linux/ewaol-baremetal-image/1.0-r0/rootfs --label rootfs-s4sk --fixed-size 6G --fstype=ext4 --align 4096
+-- 
+2.25.1
+

@@ -1,0 +1,25 @@
+header:
+  version: 11
+
+machine: s32g399ardb3
+
+repos:
+  meta-alb:
+    url: https://github.com/nxp-auto-linux/meta-alb
+    refspec: release/bsp38.0-4.0
+    path: layers/meta-alb
+
+  meta-freescale:
+    url: https://github.com/Freescale/meta-freescale
+    refspec: kirkstone
+    path: layers/meta-freescale
+
+local_conf_header:
+  meta-alb: |
+    IMAGE_CLASSES += "image_types_fsl_sdcard"
+    IMAGE_FSTYPES:remove = "flashimage cpio.gz cpio cpio.gz.u-boot cpio.bz2"
+    # Don't use the s32cc-specific downstream, but rather use
+    # the generic linux-yocto
+    PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"
+    BBMASK += "u-boot-qoriq"
+    KERNEL_VERSION_SANITY_SKIP="1"

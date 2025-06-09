@@ -1,0 +1,17 @@
+### Shell environment set up for builds. ###
+
+To build for all target machines, please copy multiconfig setup:
+
+ $ cp -a ../meta-ts/meta-trustedsubstrate/conf/templates/multiconfig conf/
+ $ cp -a ../meta-ewaol-machine/meta-ewaol-ext/conf/templates/multiconfig conf/
+
+Then you can run 'bitbake <target>'
+
+Common targets are:
+
+    ewaol-baremetal-image (default MACHINE=ledge-secure-qemuarm64)
+
+Other commonly useful commands are:
+ - 'devtool' and 'recipetool' handle common recipe tasks
+ - 'bitbake-layers' handles common layer tasks
+ - 'oe-pkgdata-util' handles common target package tasks
